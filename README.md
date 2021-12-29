@@ -1,5 +1,16 @@
 # clients_api
-Python clients for inferencing magcil API
+Python clients for inferencing MagCIL Deep Audio API.
+
+Deep Audio API provides access to a set of models that analyze audio signals in terms of:
+ - General auditory analysis (discriminate between music, speech, other sounds and silence)
+ - Musical classification (musical genres, moods and styles)
+ - Speaker characteristics (gender, speaking style etc)
+ - Environmental sound analysis (recognize quality of "soundscape")
+
+
+Access to the API is provided through a simple Python client that sends audio data via an GRPC connection. Audio predictions are returned in a simple json format.
+
+
 
 ## 0. Install requiremets
 ```
