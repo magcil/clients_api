@@ -39,7 +39,6 @@ with open('ssl_keys/client.key', 'rb') as fh:
 
 def run(models, list_of_files, token, username, model_version="", url='localhost:50051',
         root_certificates=None, private_key=None, certificate_chain=None): 
-    print(url)
     with grpc.secure_channel(url, grpc.composite_channel_credentials(
         grpc.ssl_channel_credentials(root_certificates=root_cert,
                                      private_key=client_key,
