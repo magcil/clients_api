@@ -19,6 +19,11 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 ```
 
+You may also need to install portaudio and related dependencies. For ubuntu:
+```
+sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
+```
+
 ## 1. Client 
 In order to request predictions for specific audio files use the following command: 
 
