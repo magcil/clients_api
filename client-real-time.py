@@ -16,12 +16,6 @@ from datetime import datetime
 
 "Client of the whole/end-to-end pipeline including both grpc and triton servers"
 
-def get_wav_duration(fname):
-    with contextlib.closing(wave.open(fname,'r')) as f:
-        frames = f.getnframes()
-        rate = f.getframerate()
-        duration = frames / float(rate)
-        return duration
 
 class GrpcAuth(grpc.AuthMetadataPlugin):
     def __init__(self, key, user):
@@ -30,6 +24,7 @@ class GrpcAuth(grpc.AuthMetadataPlugin):
 
     def __call__(self, context, callback):
         callback((('token', self._key), ('user', self._user),), None)
+
 
 with open('ssl_keys/ca.crt', 'rb') as fh:
     root_cert = fh.read()
@@ -40,7 +35,7 @@ with open('ssl_keys/client.key', 'rb') as fh:
 
 
 def run(models, token, username, model_version="", url='localhost:50051',
-        root_certificates=None, private_key=None, certificate_chain=None): 
+        root_certificates=None, private_key=None, certificate_chain=None):
     print(url)
     with grpc.secure_channel(url, grpc.composite_channel_credentials(
         grpc.ssl_channel_credentials(root_certificates=root_cert,
@@ -60,7 +55,7 @@ def run(models, token, username, model_version="", url='localhost:50051',
 
             fs = 8000
             FORMAT = pyaudio.paInt16
-            mid_buf_size = int(fs * 1.0) # 1 sec 
+            mid_buf_size = int(fs * 1.0)  # 1 sec 
             pa = pyaudio.PyAudio()
             stream = pa.open(format=FORMAT, channels=1, rate=fs,
                              input=True, frames_per_buffer=mid_buf_size)
@@ -105,6 +100,8 @@ def run(models, token, username, model_version="", url='localhost:50051',
                     dicts = dict(zip(keys, values))
                     print(dicts)
                 print(time.time() - t1)
+
+
 if __name__ == '__main__':
     logging.basicConfig()
 
@@ -127,7 +124,7 @@ if __name__ == '__main__':
                         type=str,
                         required=False,
                         default='localhost:50051',
-                        help='Inference server URL. Default is localhost:8000.')
+                        help='Inference server URL. Default is localhost:8000')
     parser.add_argument(
         '-rc',
         '--root_certificates',
@@ -154,13 +151,12 @@ if __name__ == '__main__':
         '--token',
         type=str,
         required=True,
-        help='Token') 
+        help='Token')
     parser.add_argument(
         '--username',
         type=str,
         required=True,
-        help='Username')  
-
+        help='Username')
 
     FLAGS = parser.parse_args()
 
@@ -170,4 +166,3 @@ if __name__ == '__main__':
         private_key=FLAGS.private_key,
         certificate_chain=FLAGS.certificate_chain
     )
-
