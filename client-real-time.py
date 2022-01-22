@@ -75,6 +75,7 @@ def run(models, token, username, model_version="", url='localhost:50051',
             import struct
 
             fs = 8000
+            data_3sec = []
             FORMAT = pyaudio.paInt16
             mid_buf_size = int(fs * 1.0)  # 1 sec 
             pa = pyaudio.PyAudio()
@@ -100,6 +101,9 @@ def run(models, token, username, model_version="", url='localhost:50051',
                 filename = f"{dt_string}.wav"
 
                 data = x.tobytes()
+                data_3sec += data
+                data_3sec = data_3sec[-3 * fs :]
+                print(len(data_3sec))
                 make_predictions(stub, fs, filename, dimension, data, models, model_version)
                 print(time.time() - t1)
 
