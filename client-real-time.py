@@ -34,6 +34,27 @@ with open('ssl_keys/client.key', 'rb') as fh:
     client_key = fh.read()
 
 
+def make_predictions(stub, fs, filename, dimension, data, models, model_version):
+    request = magcil_api_pb2.AudioRequest(filename=filename, dimension=dimension,
+                                          data=data, fs=fs, models=models,
+                                          model_version=model_version)
+    for response in stub.Predict(iter([request])):
+        number_of_models = len(response.model_name)
+        keys = []
+        values = [[] for i in range(number_of_models)]
+        for i in range(number_of_models):
+            preds = response.preds[i]
+            classes = response.classes[i]
+            pred_classes = [classes.cl[pred] for pred in preds.p]
+            st = 0
+            for j in pred_classes:
+                et = st + response.step[i]
+                values[i].append({"st": st, "et": et, "class": j})
+                st += response.step[i]
+            keys.append(response.model_name[i])
+        dicts = dict(zip(keys, values))
+        print(dicts)
+
 def run(models, token, username, model_version="", url='localhost:50051',
         root_certificates=None, private_key=None, certificate_chain=None):
     print(url)
@@ -79,26 +100,7 @@ def run(models, token, username, model_version="", url='localhost:50051',
                 filename = f"{dt_string}.wav"
 
                 data = x.tobytes()
-                request = magcil_api_pb2.AudioRequest(
-                    filename=filename, dimension=dimension,
-                    data=data, fs=fs, models=models,
-                    model_version=model_version)
-                for response in stub.Predict(iter([request])):
-                    number_of_models = len(response.model_name)
-                    keys = []
-                    values = [[] for i in range(number_of_models)]
-                    for i in range(number_of_models):
-                        preds = response.preds[i]
-                        classes = response.classes[i]
-                        pred_classes = [classes.cl[pred] for pred in preds.p]
-                        st = 0
-                        for j in pred_classes:
-                            et = st + response.step[i]
-                            values[i].append({"st": st, "et": et, "class": j})
-                            st += response.step[i]
-                        keys.append(response.model_name[i])
-                    dicts = dict(zip(keys, values))
-                    print(dicts)
+                make_predictions(stub, fs, filename, dimension, data, models, model_version)
                 print(time.time() - t1)
 
 
