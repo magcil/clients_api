@@ -79,7 +79,7 @@ if __name__ == '__main__':
     #link = "https://www.youtube.com/watch?v=3A1WFqnvi4k"
     link = FLAGS.input
     # currently supports only one model
-    model = FLAGS.model[0]
+    models = FLAGS.model
 
     ydl_opts = {
         'format': 'bestaudio/best',
@@ -109,10 +109,10 @@ if __name__ == '__main__':
         private_key=FLAGS.private_key,
         certificate_chain=FLAGS.certificate_chain
     )
-
-    r_classes = {model: [c["class"] for c in r[0][model]]}
-    import plotly.express as px
-    fig = px.scatter(r_classes)
-    fig.update_traces(marker_size=10)
-    fig.show()
+    for model in models:
+        r_classes = {model: [c["class"] for c in r[0][model]]}
+        import plotly.express as px
+        fig = px.scatter(r_classes)
+        fig.update_traces(marker_size=7)
+        fig.show()
 
