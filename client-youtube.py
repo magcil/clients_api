@@ -96,13 +96,20 @@ def plot_rectangles(y_points):
 class PlaySound:
     def __init__(self, rectangles):
         self.rectangles = rectangles
+        self.width = 0
+        self.height = 0.6
 
     def play(self, event):
-        print(1)
         x = event.xdata
         for rect in self.rectangles:
             if rect[0] <= x <= rect[1]:
                 start = rect[0] + (rect[1] - rect[0]) / 2 - 2
+
+                rect = Rectangle(rect, self.width + 1, self.height,
+                                              edgecolor="red",
+                                              facecolor='none',
+                                              lw=3)
+                plt.gca().add_patch(rect)
                 os.system(f"ffmpeg -i temp.wav -ss {start} "
                           f"-t 5 temp2.wav -y")
 
@@ -111,6 +118,11 @@ class PlaySound:
                 elif platform.system() == "Linux":
                     os.system("aplay temp2.wav")
 
+                rect = Rectangle(rect, self.width + 1, self.height,
+                                 edgecolor="green",
+                                 facecolor='none',
+                                 lw=3)
+                plt.gca().add_patch(rect)
         return
 
 
@@ -241,4 +253,5 @@ if __name__ == '__main__':
     for model in models:
         preds = [c["class"] for c in r[0][model]]
         filtered_preds = med_filter(preds, 3)
+        filtered_preds = med_filter(filtered_preds, 3)
         plot_magic(filtered_preds)
