@@ -241,4 +241,5 @@ if __name__ == '__main__':
     for model in models:
         preds = [c["class"] for c in r[0][model]]
         filtered_preds = med_filter(preds, 3)
+        filtered_preds = med_filter(filtered_preds, 3)
         plot_magic(filtered_preds)
