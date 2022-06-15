@@ -30,7 +30,7 @@ In order to request predictions for specific audio files use the following comma
 ```python3 client.py -m deployed_model -i <audio_input> -u url -t token --username user```
 
 Where: 
-- `deployed_model`: is the name of the deployed ensemble model in server which encapsulates both preprocessing and pytorch models (this argument could be list of models). Select between `ensemble_dali_4_class`, `ensemble_dali_emotions` or both. 
+- `deployed_model`: is the name of the deployed ensemble model in server which encapsulates both preprocessing and pytorch models (this argument could be list of models). Select between `4_class`, `speech_valence`, `speech_arousal`, `speech_gender`, `music_genre`, `music_energy` and `sound_scape`. 
 - `audio_input`: is the path of the input wav files to be tested.
 - `url`: is the 'url:port' of the grpc server, e.g. localhost:50051
 - `token`: is the token to be used for authentication
@@ -43,7 +43,7 @@ In order to request predictions for real-time recorded audios, use the following
 
 Where: 
 - `deployed_model`: is the name of the deployed ensemble model in server which encapsulates both preprocessing and pytorch models (this argument could be list of models).
-  Select between 'ensemble_dali_4_class', 'ensemble_dali_emotions' or both.
+  Select between `4_class`, `speech_valence`, `speech_arousal`, `speech_gender`, `music_genre`, `music_energy` and `sound_scape`.
 - `url`: is the 'url:port' of the grpc server, e.g. localhost:50051
 - `token`: is the token to be used for authentication
 - `user`: is the email to be used for authentication
@@ -55,7 +55,7 @@ In order to request prediction for an audio downloaded from a specific youtube u
 
 Where: 
 - `deployed_model`: is the name of the deployed ensemble model in server which encapsulates both preprocessing and pytorch models (this argument could be list of models).
-  Select between `ensemble_dali_4_class`, `ensemble_dali_emotions` or both.
+  Select between `4_class`, `speech_valence`, `speech_arousal`, `speech_gender`, `music_genre`, `music_energy` and `sound_scape`.
 - `youtube_url` : is the url of the youtube video to be used as audio input.
 - `url`: is the 'url:port' of the grpc server, e.g. localhost:50051
 - `token`: is the token to be used for authentication
